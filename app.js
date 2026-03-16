@@ -175,15 +175,21 @@ function foundWord() {
     gameState.team1Score += gameState.currentTeam === 1 ? 1 : 0;
     gameState.team2Score += gameState.currentTeam === 2 ? 1 : 0;
 
-    gameState.currentWordIndex++;
-
-    // Boucler si on atteint la fin de la liste
-    if (gameState.currentWordIndex >= gameState.unfoundWords.length) {
-        gameState.currentWordIndex = 0;
-    }
-
     updateScoresDisplay();
-    displayNextWord();
+
+    // Vérifier si tous les mots sont trouvés
+    if (gameState.foundWords.length >= gameState.words.length) {
+        endTurn();
+    } else {
+        gameState.currentWordIndex++;
+
+        // Boucler si on atteint la fin de la liste
+        if (gameState.currentWordIndex >= gameState.unfoundWords.length) {
+            gameState.currentWordIndex = 0;
+        }
+
+        displayNextWord();
+    }
 }
 
 function skipWord() {
