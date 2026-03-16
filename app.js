@@ -167,7 +167,12 @@ function displayNextWord() {
 }
 
 function foundWord() {
-    if (!gameState.isTimerRunning || gameState.unfoundWords.length === 0) return;
+    if (!gameState.isTimerRunning) return;
+
+    // Recalculer les mots non trouvés pour avoir la liste à jour
+    gameState.unfoundWords = gameState.words.filter(w => !gameState.foundWords.includes(w));
+
+    if (gameState.unfoundWords.length === 0) return;
 
     const word = gameState.unfoundWords[gameState.currentWordIndex];
     gameState.foundWords.push(word);
@@ -181,19 +186,20 @@ function foundWord() {
     if (gameState.foundWords.length >= gameState.words.length) {
         endTurn();
     } else {
-        gameState.currentWordIndex++;
-
-        // Boucler si on atteint la fin de la liste
-        if (gameState.currentWordIndex >= gameState.unfoundWords.length) {
-            gameState.currentWordIndex = 0;
-        }
-
+        // Chercher le prochain mot non trouvé après celui-ci
+        gameState.unfoundWords = gameState.words.filter(w => !gameState.foundWords.includes(w));
+        gameState.currentWordIndex = 0; // Recommencer à partir du début de la nouvelle liste
         displayNextWord();
     }
 }
 
 function skipWord() {
-    if (!gameState.isTimerRunning || gameState.unfoundWords.length === 0) return;
+    if (!gameState.isTimerRunning) return;
+
+    // Recalculer les mots non trouvés pour avoir la liste à jour
+    gameState.unfoundWords = gameState.words.filter(w => !gameState.foundWords.includes(w));
+
+    if (gameState.unfoundWords.length === 0) return;
 
     gameState.currentWordIndex++;
 
