@@ -18,9 +18,9 @@ Une application simple pour jouer au jeu Timesup avec 2 équipes, 3 manches et u
 
 - **✓ Mot trouvé** : Valide un mot deviné (+1 point)
 - **⊘ Passer** : Passe au mot suivant (0 point)
-- **Fin de manche** : Termine la manche avant la fin du timer
+- **Fin de manche** : Termine le tour avant la fin du timer
 
-Chaque manche dure 60 secondes.
+Chaque équipe joue un tour de 60 secondes. La manche se termine quand tous les mots sont trouvés.
 
 ## Caractéristiques
 
