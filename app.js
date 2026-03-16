@@ -47,6 +47,7 @@ let gameState = {
 // DOM Elements
 const homeScreen = document.getElementById('homeScreen');
 const gameScreen = document.getElementById('gameScreen');
+const turnEndScreen = document.getElementById('turnEndScreen');
 const roundEndScreen = document.getElementById('roundEndScreen');
 const endScreen = document.getElementById('endScreen');
 
@@ -55,6 +56,7 @@ const wordCountInput = document.getElementById('wordCount');
 const foundBtn = document.getElementById('foundBtn');
 const skipBtn = document.getElementById('skipBtn');
 const endRoundBtn = document.getElementById('endRoundBtn');
+const continueBtn = document.getElementById('continueBtn');
 const nextRoundBtn = document.getElementById('nextRoundBtn');
 const restartBtn = document.getElementById('restartBtn');
 
@@ -63,6 +65,7 @@ startBtn.addEventListener('click', startGame);
 foundBtn.addEventListener('click', foundWord);
 skipBtn.addEventListener('click', skipWord);
 endRoundBtn.addEventListener('click', endTurn);
+continueBtn.addEventListener('click', continueTurn);
 nextRoundBtn.addEventListener('click', nextRound);
 restartBtn.addEventListener('click', restartGame);
 
@@ -169,6 +172,8 @@ function foundWord() {
     const word = gameState.unfoundWords[gameState.currentWordIndex];
     gameState.foundWords.push(word);
     gameState.turnScores[gameState.currentTeam]++;
+    gameState.team1Score += gameState.currentTeam === 1 ? 1 : 0;
+    gameState.team2Score += gameState.currentTeam === 2 ? 1 : 0;
 
     gameState.currentWordIndex++;
 
@@ -177,6 +182,7 @@ function foundWord() {
         gameState.currentWordIndex = 0;
     }
 
+    updateScoresDisplay();
     displayNextWord();
 }
 
@@ -199,18 +205,31 @@ function endTurn() {
     foundBtn.disabled = false;
     skipBtn.disabled = false;
 
-    // Ajouter les points au score total
-    gameState.team1Score += gameState.turnScores[1];
-    gameState.team2Score += gameState.turnScores[2];
-
     // Vérifier si tous les mots sont trouvés
     if (gameState.foundWords.length >= gameState.words.length) {
         endRound();
     } else {
-        // Passer à l'autre équipe
-        gameState.currentTeam = gameState.currentTeam === 1 ? 2 : 1;
-        startTurn();
+        showTurnEnd();
     }
+}
+
+function showTurnEnd() {
+    const nextTeam = gameState.currentTeam === 1 ? 2 : 1;
+    document.getElementById('turnInfo').textContent =
+        `Équipe ${gameState.currentTeam} a marqué ${gameState.turnScores[gameState.currentTeam]} point(s) ce tour`;
+    document.getElementById('turnTeam1Score').textContent = gameState.team1Score;
+    document.getElementById('turnTeam2Score').textContent = gameState.team2Score;
+    document.getElementById('nextTeamMessage').textContent =
+        `À Équipe ${nextTeam} de jouer!`;
+
+    showScreen(turnEndScreen);
+}
+
+function continueTurn() {
+    // Passer à l'autre équipe
+    gameState.currentTeam = gameState.currentTeam === 1 ? 2 : 1;
+    showScreen(gameScreen);
+    startTurn();
 }
 
 function endRound() {
@@ -281,6 +300,7 @@ function restartGame() {
 function showScreen(screen) {
     homeScreen.classList.add('hidden');
     gameScreen.classList.add('hidden');
+    turnEndScreen.classList.add('hidden');
     roundEndScreen.classList.add('hidden');
     endScreen.classList.add('hidden');
 
