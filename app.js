@@ -11,12 +11,12 @@ const WORDS_LIST = [
     'Carotte', 'Tomate', 'Oignon', 'Ail', 'Fromage', 'Pain', 'Lait', 'Beurre',
     'Eau', 'Jus', 'Café', 'Thé', 'Chocolat', 'Gâteau', 'Biscuit', 'Bonbon',
     'Pizza', 'Hamburger', 'Salade', 'Soupe', 'Pâtes', 'Riz', 'Poisson', 'Poulet',
-    'Viande', 'Œuf', 'Restaurant', 'Cuisine', 'Cuisine', 'Recette', 'Cuillère', 'Fourchette',
+    'Viande', 'Œuf', 'Restaurant', 'Cuisine', 'Recette', 'Cuillère', 'Fourchette',
     'Couteau', 'Assiette', 'Verre', 'Tasse', 'Bouteille', 'Pot', 'Casserole', 'Poêle',
     'Sport', 'Football', 'Basket', 'Tennis', 'Golf', 'Natation', 'Ski', 'Boxe',
     'Danse', 'Musique', 'Chanson', 'Orchestre', 'Concert', 'Théâtre', 'Acteur', 'Artiste',
     'Peinture', 'Sculpture', 'Statue', 'Musée', 'Galerie', 'Exposition', 'Couleur', 'Rouge',
-    'Bleu', 'Vert', 'Jaune', 'Orange', 'Violet', 'Rose', 'Noir', 'Blanc',
+    'Bleu', 'Vert', 'Jaune', 'Violet', 'Rose', 'Noir', 'Blanc',
     'Gris', 'Marron', 'Nombre', 'Lettre', 'Alphabet', 'Mot', 'Phrase', 'Histoire',
     'Conte', 'Fable', 'Légende', 'Mythe', 'Religion', 'Magie', 'Rêve', 'Cauchemar',
     'Aventure', 'Mystère', 'Énigme', 'Jeu', 'Jouet', 'Poupée', 'Robot', 'Voilier'
@@ -32,11 +32,12 @@ const ROUND_RULES = [
 let gameState = {
     currentRound: 1,
     words: [],
+    foundWords: [],
     currentWordIndex: 0,
     currentTeam: 1,
     team1Score: 0,
     team2Score: 0,
-    roundScores: { 1: 0, 2: 0 },
+    turnScores: { 1: 0, 2: 0 },
     isTimerRunning: false,
     timeRemaining: 60,
     wordCount: 0
@@ -60,7 +61,7 @@ const restartBtn = document.getElementById('restartBtn');
 startBtn.addEventListener('click', startGame);
 foundBtn.addEventListener('click', foundWord);
 skipBtn.addEventListener('click', skipWord);
-endRoundBtn.addEventListener('click', endRound);
+endRoundBtn.addEventListener('click', endTurn);
 nextRoundBtn.addEventListener('click', nextRound);
 restartBtn.addEventListener('click', restartGame);
 
@@ -73,23 +74,28 @@ function startGame() {
 
     gameState.wordCount = count;
     gameState.words = shuffleArray(WORDS_LIST).slice(0, count);
+    gameState.foundWords = [];
     gameState.currentRound = 1;
-    gameState.currentWordIndex = 0;
+    gameState.currentTeam = 1;
     gameState.team1Score = 0;
     gameState.team2Score = 0;
-    gameState.roundScores = { 1: 0, 2: 0 };
-    gameState.currentTeam = 1;
 
     showScreen(gameScreen);
     startRound();
 }
 
 function startRound() {
-    gameState.currentWordIndex = 0;
-    gameState.roundScores = { 1: 0, 2: 0 };
+    gameState.foundWords = [];
     gameState.currentTeam = 1;
+    gameState.turnScores = { 1: 0, 2: 0 };
 
     updateRoundDisplay();
+    startTurn();
+}
+
+function startTurn() {
+    gameState.turnScores[gameState.currentTeam] = 0;
+    gameState.currentWordIndex = 0;
     displayNextWord();
     startTimer();
 }
@@ -105,11 +111,10 @@ function startTimer() {
         if (gameState.timeRemaining <= 0) {
             clearInterval(timerInterval);
             gameState.isTimerRunning = false;
-            endRound();
+            endTurn();
         }
     }, 1000);
 
-    // Stocker l'interval ID pour pouvoir l'arrêter plus tard
     gameState.timerInterval = timerInterval;
 }
 
@@ -146,42 +151,50 @@ function displayNextWord() {
 }
 
 function foundWord() {
-    gameState.roundScores[gameState.currentTeam]++;
+    const word = gameState.words[gameState.currentWordIndex];
+    if (!gameState.foundWords.includes(word)) {
+        gameState.foundWords.push(word);
+    }
+    gameState.turnScores[gameState.currentTeam]++;
     gameState.currentWordIndex++;
-    gameState.currentTeam = gameState.currentTeam === 1 ? 2 : 1;
 
     if (gameState.currentWordIndex < gameState.words.length) {
         displayNextWord();
-        updateRoundDisplay();
-    } else {
-        endRound();
     }
 }
 
 function skipWord() {
     gameState.currentWordIndex++;
-    gameState.currentTeam = gameState.currentTeam === 1 ? 2 : 1;
 
     if (gameState.currentWordIndex < gameState.words.length) {
         displayNextWord();
-        updateRoundDisplay();
-    } else {
+    }
+}
+
+function endTurn() {
+    clearInterval(gameState.timerInterval);
+    gameState.isTimerRunning = false;
+    foundBtn.disabled = false;
+    skipBtn.disabled = false;
+
+    // Ajouter les points au score total
+    gameState.team1Score += gameState.turnScores[1];
+    gameState.team2Score += gameState.turnScores[2];
+
+    // Vérifier si tous les mots sont trouvés
+    if (gameState.foundWords.length >= gameState.words.length) {
         endRound();
+    } else {
+        // Passer à l'autre équipe
+        gameState.currentTeam = gameState.currentTeam === 1 ? 2 : 1;
+        startTurn();
     }
 }
 
 function endRound() {
-    clearInterval(gameState.timerInterval);
-    gameState.isTimerRunning = false;
-
-    // Ajouter les points de cette équipe
-    gameState.team1Score += gameState.roundScores[1];
-    gameState.team2Score += gameState.roundScores[2];
-
-    // Afficher l'écran de fin de manche
     showScreen(roundEndScreen);
-    document.getElementById('roundEndTeam1').textContent = `${gameState.roundScores[1]} points`;
-    document.getElementById('roundEndTeam2').textContent = `${gameState.roundScores[2]} points`;
+    document.getElementById('roundEndTeam1').textContent = `${gameState.team1Score} points`;
+    document.getElementById('roundEndTeam2').textContent = `${gameState.team2Score} points`;
 
     updateScoresDisplay();
 }
@@ -228,15 +241,18 @@ function restartGame() {
     gameState = {
         currentRound: 1,
         words: [],
+        foundWords: [],
         currentWordIndex: 0,
         currentTeam: 1,
         team1Score: 0,
         team2Score: 0,
-        roundScores: { 1: 0, 2: 0 },
+        turnScores: { 1: 0, 2: 0 },
         isTimerRunning: false,
         timeRemaining: 60,
         wordCount: 0
     };
+    foundBtn.disabled = false;
+    skipBtn.disabled = false;
 }
 
 function showScreen(screen) {
