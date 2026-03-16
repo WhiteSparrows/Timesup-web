@@ -61,6 +61,26 @@
             </div>
         </div>
 
+        <!-- Écran fin de tour -->
+        <div id="turnEndScreen" class="screen hidden">
+            <h2>Fin du tour</h2>
+            <div class="turn-summary">
+                <p class="turn-info" id="turnInfo"></p>
+                <div class="scores-display">
+                    <div class="team-score-detail">
+                        <span class="team-name">Équipe 1</span>
+                        <span class="score" id="turnTeam1Score">0</span>
+                    </div>
+                    <div class="team-score-detail">
+                        <span class="team-name">Équipe 2</span>
+                        <span class="score" id="turnTeam2Score">0</span>
+                    </div>
+                </div>
+            </div>
+            <p class="next-team" id="nextTeamMessage"></p>
+            <button id="continueBtn" class="btn btn-primary">Continuer</button>
+        </div>
+
         <!-- Écran fin de manche -->
         <div id="roundEndScreen" class="screen hidden">
             <h2>Fin de manche</h2>
