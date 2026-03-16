@@ -33,6 +33,7 @@ let gameState = {
     currentRound: 1,
     words: [],
     foundWords: [],
+    unfoundWords: [],
     currentWordIndex: 0,
     currentTeam: 1,
     team1Score: 0,
@@ -86,6 +87,7 @@ function startGame() {
 
 function startRound() {
     gameState.foundWords = [];
+    gameState.unfoundWords = [...gameState.words];
     gameState.currentTeam = 1;
     gameState.turnScores = { 1: 0, 2: 0 };
 
@@ -95,11 +97,11 @@ function startRound() {
 
 function startTurn() {
     gameState.turnScores[gameState.currentTeam] = 0;
-    gameState.currentWordIndex = findNextUnfoundWord();
+    gameState.currentWordIndex = 0;
 
-    if (gameState.currentWordIndex === -1) {
-        // Tous les mots sont trouvés, fin de manche automatique
-        endTurn();
+    // Vérifier si tous les mots sont trouvés
+    if (gameState.foundWords.length >= gameState.words.length) {
+        endRound();
     } else {
         displayNextWord();
         startTimer();
@@ -146,19 +148,15 @@ function updateRoundDisplay() {
     updateScoresDisplay();
 }
 
-function findNextUnfoundWord() {
-    for (let i = 0; i < gameState.words.length; i++) {
-        if (!gameState.foundWords.includes(gameState.words[i])) {
-            return i;
-        }
-    }
-    return -1;
-}
-
 function displayNextWord() {
-    if (gameState.currentWordIndex >= 0 && gameState.currentWordIndex < gameState.words.length) {
-        const word = gameState.words[gameState.currentWordIndex];
+    // Recalculer les mots non trouvés
+    gameState.unfoundWords = gameState.words.filter(w => !gameState.foundWords.includes(w));
+
+    if (gameState.unfoundWords.length > 0 && gameState.currentWordIndex < gameState.unfoundWords.length) {
+        const word = gameState.unfoundWords[gameState.currentWordIndex];
         document.getElementById('currentWord').textContent = word;
+        foundBtn.disabled = false;
+        skipBtn.disabled = false;
     } else {
         foundBtn.disabled = true;
         skipBtn.disabled = true;
@@ -166,37 +164,33 @@ function displayNextWord() {
 }
 
 function foundWord() {
-    if (gameState.currentWordIndex < 0 || !gameState.isTimerRunning) return;
+    if (!gameState.isTimerRunning || gameState.unfoundWords.length === 0) return;
 
-    const word = gameState.words[gameState.currentWordIndex];
-    if (!gameState.foundWords.includes(word)) {
-        gameState.foundWords.push(word);
-        gameState.turnScores[gameState.currentTeam]++;
+    const word = gameState.unfoundWords[gameState.currentWordIndex];
+    gameState.foundWords.push(word);
+    gameState.turnScores[gameState.currentTeam]++;
+
+    gameState.currentWordIndex++;
+
+    // Boucler si on atteint la fin de la liste
+    if (gameState.currentWordIndex >= gameState.unfoundWords.length) {
+        gameState.currentWordIndex = 0;
     }
 
-    gameState.currentWordIndex = findNextUnfoundWord();
-
-    if (gameState.currentWordIndex === -1) {
-        foundBtn.disabled = true;
-        skipBtn.disabled = true;
-        endTurn();
-    } else {
-        displayNextWord();
-    }
+    displayNextWord();
 }
 
 function skipWord() {
-    if (gameState.currentWordIndex < 0 || !gameState.isTimerRunning) return;
+    if (!gameState.isTimerRunning || gameState.unfoundWords.length === 0) return;
 
-    gameState.currentWordIndex = findNextUnfoundWord();
+    gameState.currentWordIndex++;
 
-    if (gameState.currentWordIndex === -1) {
-        foundBtn.disabled = true;
-        skipBtn.disabled = true;
-        endTurn();
-    } else {
-        displayNextWord();
+    // Boucler si on atteint la fin de la liste
+    if (gameState.currentWordIndex >= gameState.unfoundWords.length) {
+        gameState.currentWordIndex = 0;
     }
+
+    displayNextWord();
 }
 
 function endTurn() {
@@ -270,6 +264,7 @@ function restartGame() {
         currentRound: 1,
         words: [],
         foundWords: [],
+        unfoundWords: [],
         currentWordIndex: 0,
         currentTeam: 1,
         team1Score: 0,
