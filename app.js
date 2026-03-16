@@ -1,25 +1,42 @@
-// Liste de mots prédéfinis
+// Liste de mots prédéfinis (150+ mots pour plus de variété)
 const WORDS_LIST = [
-    'Chien', 'Chat', 'Maison', 'Arbre', 'Voiture', 'Soleil', 'Lune', 'Étoile',
-    'Piano', 'Guitare', 'Cinéma', 'Livre', 'Stylo', 'Crayon', 'Papier', 'Table',
-    'Chaise', 'Lit', 'Fenêtre', 'Porte', 'Clé', 'Serrure', 'Lampe', 'Ampoule',
-    'Téléphone', 'Ordinateur', 'Souris', 'Clavier', 'Écran', 'Caméra', 'Photo', 'Vidéo',
-    'Montagne', 'Rivière', 'Plage', 'Désert', 'Forêt', 'Jungle', 'Océan', 'Lac',
-    'Nuage', 'Pluie', 'Neige', 'Vent', 'Tonerre', 'Arc-en-ciel', 'Saison', 'Automne',
-    'Hiver', 'Printemps', 'Été', 'Jour', 'Nuit', 'Matin', 'Soir', 'Minuit',
+    // Animaux
+    'Chien', 'Chat', 'Oiseau', 'Poisson', 'Lion', 'Éléphant', 'Girafe', 'Zèbre',
+    'Singe', 'Ours', 'Loup', 'Renard', 'Cerf', 'Cheval', 'Vache', 'Mouton',
+    'Cochon', 'Poule', 'Canard', 'Pingouin', 'Perroquet', 'Papillon', 'Abeille', 'Araignée',
+    // Nature
+    'Maison', 'Arbre', 'Voiture', 'Soleil', 'Lune', 'Étoile', 'Montagne', 'Rivière',
+    'Plage', 'Désert', 'Forêt', 'Jungle', 'Océan', 'Lac', 'Nuage', 'Pluie',
+    'Neige', 'Vent', 'Tonnerre', 'Arc-en-ciel', 'Saison', 'Automne', 'Hiver', 'Printemps',
+    'Été', 'Jour', 'Nuit', 'Matin', 'Soir', 'Minuit', 'Coucher de soleil', 'Lever de soleil',
+    // Musique et Art
+    'Piano', 'Guitare', 'Violon', 'Trompette', 'Batterie', 'Flûte', 'Saxophone', 'Harmonica',
+    'Cinéma', 'Livre', 'Peinture', 'Sculpture', 'Statue', 'Musée', 'Galerie', 'Exposition',
+    'Théâtre', 'Acteur', 'Artiste', 'Chanson', 'Orchestre', 'Concert', 'Musique', 'Danse',
+    // Objets du quotidien
+    'Stylo', 'Crayon', 'Papier', 'Table', 'Chaise', 'Lit', 'Fenêtre', 'Porte',
+    'Clé', 'Serrure', 'Lampe', 'Ampoule', 'Téléphone', 'Ordinateur', 'Souris', 'Clavier',
+    'Écran', 'Caméra', 'Photo', 'Vidéo', 'Horloge', 'Montre', 'Miroir', 'Sac',
+    'Chaussure', 'Chapeau', 'Lunettes', 'Montre', 'Bracelet', 'Collier', 'Bague', 'Boucles d\'oreilles',
+    // Nourriture et Boisson
     'Pomme', 'Orange', 'Banane', 'Fraise', 'Raisin', 'Citron', 'Avocat', 'Brocoli',
     'Carotte', 'Tomate', 'Oignon', 'Ail', 'Fromage', 'Pain', 'Lait', 'Beurre',
     'Eau', 'Jus', 'Café', 'Thé', 'Chocolat', 'Gâteau', 'Biscuit', 'Bonbon',
     'Pizza', 'Hamburger', 'Salade', 'Soupe', 'Pâtes', 'Riz', 'Poisson', 'Poulet',
-    'Viande', 'Œuf', 'Restaurant', 'Cuisine', 'Recette', 'Cuillère', 'Fourchette',
-    'Couteau', 'Assiette', 'Verre', 'Tasse', 'Bouteille', 'Pot', 'Casserole', 'Poêle',
+    'Viande', 'Œuf', 'Glaçon', 'Crème glacée', 'Yaourt', 'Crème', 'Sauce', 'Épices',
+    // Activités et Sports
     'Sport', 'Football', 'Basket', 'Tennis', 'Golf', 'Natation', 'Ski', 'Boxe',
-    'Danse', 'Musique', 'Chanson', 'Orchestre', 'Concert', 'Théâtre', 'Acteur', 'Artiste',
-    'Peinture', 'Sculpture', 'Statue', 'Musée', 'Galerie', 'Exposition', 'Couleur', 'Rouge',
-    'Bleu', 'Vert', 'Jaune', 'Violet', 'Rose', 'Noir', 'Blanc',
-    'Gris', 'Marron', 'Nombre', 'Lettre', 'Alphabet', 'Mot', 'Phrase', 'Histoire',
-    'Conte', 'Fable', 'Légende', 'Mythe', 'Religion', 'Magie', 'Rêve', 'Cauchemar',
-    'Aventure', 'Mystère', 'Énigme', 'Jeu', 'Jouet', 'Poupée', 'Robot', 'Voilier'
+    'Course', 'Vélo', 'Skateboard', 'Patinage', 'Voile', 'Plongée', 'Escalade', 'Randonnée',
+    'Jeu', 'Jouet', 'Poupée', 'Robot', 'Voilier', 'Avion', 'Fusée', 'Train',
+    // Couleurs et Formes
+    'Rouge', 'Bleu', 'Vert', 'Jaune', 'Violet', 'Rose', 'Noir', 'Blanc',
+    'Gris', 'Marron', 'Orange', 'Turquoise', 'Cercle', 'Carré', 'Triangle', 'Étoile',
+    // Lieux et Bâtiments
+    'Restaurant', 'Cuisine', 'Supermarché', 'Hôpital', 'École', 'Bibliothèque', 'Église', 'Château',
+    'Parc', 'Gare', 'Aéroport', 'Hôtel', 'Cinema', 'Théâtre', 'Stade', 'Usine',
+    // Émotions et Concepts
+    'Joie', 'Tristesse', 'Colère', 'Peur', 'Amour', 'Haine', 'Surprise', 'Dégoût',
+    'Courage', 'Courage', 'Amitié', 'Famille', 'Mariage', 'Noël', 'Anniversaire', 'Fête'
 ];
 
 const ROUND_RULES = [
@@ -90,6 +107,8 @@ function startGame() {
 
 function startRound() {
     gameState.foundWords = [];
+    // Remélanger les mots à chaque manche pour plus de variété
+    gameState.words = shuffleArray(gameState.words);
     gameState.unfoundWords = [...gameState.words];
     gameState.currentTeam = 1;
     gameState.turnScores = { 1: 0, 2: 0 };
