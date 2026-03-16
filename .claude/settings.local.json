@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -c app.js)",
+      "Bash(wc -l *.js *.css *.html)",
+      "Bash(git add:*)"
+    ]
+  }
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timesup - Jeu de Devinettes</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Écran d'accueil -->
+        <div id="homeScreen" class="screen">
+            <h1>TIMESUP</h1>
+            <p class="subtitle">Jeu de devinettes en équipe</p>
+
+            <div class="form-group">
+                <label for="wordCount">Nombre de mots par équipe :</label>
+                <input type="number" id="wordCount" min="5" max="50" value="10">
+            </div>
+
+            <button id="startBtn" class="btn btn-primary">Commencer le jeu</button>
+        </div>
+
+        <!-- Écran de jeu -->
+        <div id="gameScreen" class="screen hidden">
+            <div class="game-header">
+                <div class="round-info">
+                    <h2>Manche <span id="roundNumber">1</span></h2>
+                    <p id="roundRule"></p>
+                </div>
+                <div class="scores">
+                    <div class="team-score" id="team1Score">
+                        <span class="team-name">Équipe 1</span>
+                        <span class="score">0</span>
+                    </div>
+                    <div class="team-score" id="team2Score">
+                        <span class="team-name">Équipe 2</span>
+                        <span class="score">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div class="current-team">
+                    Équipe actuelle: <span id="currentTeamName"></span>
+                </div>
+
+                <div class="word-display">
+                    <p id="currentWord"></p>
+                </div>
+
+                <div class="timer">
+                    <span id="timerDisplay">60</span>s
+                </div>
+
+                <div class="controls">
+                    <button id="foundBtn" class="btn btn-success">✓ Mot trouvé</button>
+                    <button id="skipBtn" class="btn btn-warning">⊘ Passer</button>
+                    <button id="endRoundBtn" class="btn btn-info">Fin de manche</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Écran fin de manche -->
+        <div id="roundEndScreen" class="screen hidden">
+            <h2>Fin de manche</h2>
+            <div class="final-scores">
+                <div class="team-result">
+                    <h3>Équipe 1</h3>
+                    <p class="score" id="roundEndTeam1">0</p>
+                </div>
+                <div class="team-result">
+                    <h3>Équipe 2</h3>
+                    <p class="score" id="roundEndTeam2">0</p>
+                </div>
+            </div>
+            <button id="nextRoundBtn" class="btn btn-primary">Manche suivante</button>
+        </div>
+
+        <!-- Écran fin de jeu -->
+        <div id="endScreen" class="screen hidden">
+            <h1>FIN DE JEU</h1>
+            <div class="final-scores">
+                <div class="team-result">
+                    <h3>Équipe 1</h3>
+                    <p class="score" id="finalTeam1">0</p>
+                </div>
+                <div class="team-result">
+                    <h3>Équipe 2</h3>
+                    <p class="score" id="finalTeam2">0</p>
+                </div>
+            </div>
+            <h2 id="winnerText" class="winner"></h2>
+            <button id="restartBtn" class="btn btn-primary">Rejouer</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
