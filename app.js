@@ -95,9 +95,15 @@ function startRound() {
 
 function startTurn() {
     gameState.turnScores[gameState.currentTeam] = 0;
-    gameState.currentWordIndex = 0;
-    displayNextWord();
-    startTimer();
+    gameState.currentWordIndex = findNextUnfoundWord();
+
+    if (gameState.currentWordIndex === -1) {
+        // Tous les mots sont trouvés, fin de manche automatique
+        endTurn();
+    } else {
+        displayNextWord();
+        startTimer();
+    }
 }
 
 function startTimer() {
@@ -140,8 +146,17 @@ function updateRoundDisplay() {
     updateScoresDisplay();
 }
 
+function findNextUnfoundWord() {
+    for (let i = 0; i < gameState.words.length; i++) {
+        if (!gameState.foundWords.includes(gameState.words[i])) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 function displayNextWord() {
-    if (gameState.currentWordIndex < gameState.words.length) {
+    if (gameState.currentWordIndex >= 0 && gameState.currentWordIndex < gameState.words.length) {
         const word = gameState.words[gameState.currentWordIndex];
         document.getElementById('currentWord').textContent = word;
     } else {
@@ -151,22 +166,35 @@ function displayNextWord() {
 }
 
 function foundWord() {
+    if (gameState.currentWordIndex < 0 || !gameState.isTimerRunning) return;
+
     const word = gameState.words[gameState.currentWordIndex];
     if (!gameState.foundWords.includes(word)) {
         gameState.foundWords.push(word);
+        gameState.turnScores[gameState.currentTeam]++;
     }
-    gameState.turnScores[gameState.currentTeam]++;
-    gameState.currentWordIndex++;
 
-    if (gameState.currentWordIndex < gameState.words.length) {
+    gameState.currentWordIndex = findNextUnfoundWord();
+
+    if (gameState.currentWordIndex === -1) {
+        foundBtn.disabled = true;
+        skipBtn.disabled = true;
+        endTurn();
+    } else {
         displayNextWord();
     }
 }
 
 function skipWord() {
-    gameState.currentWordIndex++;
+    if (gameState.currentWordIndex < 0 || !gameState.isTimerRunning) return;
 
-    if (gameState.currentWordIndex < gameState.words.length) {
+    gameState.currentWordIndex = findNextUnfoundWord();
+
+    if (gameState.currentWordIndex === -1) {
+        foundBtn.disabled = true;
+        skipBtn.disabled = true;
+        endTurn();
+    } else {
         displayNextWord();
     }
 }
