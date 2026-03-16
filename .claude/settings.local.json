@@ -4,7 +4,9 @@
       "Bash(node -c app.js)",
       "Bash(wc -l *.js *.css *.html)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(gh pr:*)",
+      "Bash(git push:*)"
     ]
   }
 }
